@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
 	<meta charset="UTF-8" />
-	<title>Example 1</title>
+	<title>Text Adventure</title>
 	<script type="text/javascript" src="js/phaser.min.js"></script>
     <style type="text/css">
         body {
@@ -14,34 +14,84 @@
 
 <script type="text/javascript">
 
+/*Tasks:
+ * Make a line here with your name and what you are going to do.
+ * Include a range of page #'s that you will use that others should avoid.
+ *
+ * Hutton: Page 0 
+ * 
+ * New Buttons that say option A, option B
+ * 
+ * 
+ * 
+ * 
+ */
+
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
-var player;
+var buttonYes;
+var buttonNo;
+var pageNum;
+var nextA;
+var nextB;
+var text;
     
 function preload() {
-    game.load.image('player', 'assets/star.png');
-
+    game.load.image('buttonA', 'assets/star.png');
+    game.load.image('buttonB', 'assets/star.png');
 }
 
 function create() {
    
-   //  We're going to be using physics, so enable the Arcade Physics system
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-	// add the player to the game at x,y positions and the image name loaded previosly
-    player = game.add.sprite(game.world.width/2, game.world.height/2, 'player');
-    //  Enable physics on the player
-    game.physics.arcade.enable(player);
-    
+   game.physics.startSystem(Phaser.Physics.ARCADE);
+   buttonA = game.add.sprite(150, 500, 'buttonA');
+   buttonB = game.add.sprite(650, 500, 'buttonB');
+   buttonA.inputEnabled = true;
+   buttonB.inputEnabled = true;
+   buttonA.events.onInputDown.add(aClicked, this);
+   buttonB.events.onInputDown.add(bClicked, this);
+   text = game.add.text(50, 50, '', { fill: '#ffffff' });
+   page = 0;
 }
-	
-function update() {
-        
-    player.body.velocity.x = 0;
-    if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-    {
-        player.body.velocity.x = -150;
-    }
 
+function aClicked(){
+    page = nextA;
+}
+
+
+function bClicked(){
+    page = nextB;
+}
+
+function update() {
+    if(page===0){
+        text.setText("The bell rings. It is 3:30 on a Monday afternoon.\n"+
+                     "Your friend asks if you want to go with them to the mall.\n"+
+                     "Do you...\n"+
+                     "A) Go to the mall\n"+
+                     "B) Go home.");
+        nextA = 1;
+        nextB = 2;
+    }    
+    if(page===1){
+         text.setText("You and your friends go to the mall where...\n"+
+                     "\n"+
+                     "Do you...\n"+
+                     "A) \n"+
+                     "B) .");
+        nextA = 30;
+        nextB = 40;
+    }  
+    if(page===2){
+        text.setText("You have homework, so you head home... "+
+                     "\n"+
+                     "Do you...\n"+
+                     "A) \n"+
+                     "B) .");       
+        nextA = 50;
+        nextB = 60;
+    }  
 }
     
 
